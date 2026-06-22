@@ -1,4 +1,5 @@
 import { cart } from '../data/cart.js';
+import { products } from '../data/products.js';
 
 // Stores active timeout IDs for "Added to Cart" messages
 // Key: productId, Value: timeoutId
