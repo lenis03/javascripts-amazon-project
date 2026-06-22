@@ -1,3 +1,5 @@
+import { cart } from '../data/cart.js';
+
 // Stores active timeout IDs for "Added to Cart" messages
 // Key: productId, Value: timeoutId
 const addedMessageTimeouts = {};
