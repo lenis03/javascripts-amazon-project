@@ -1,38 +1,40 @@
-import { cart, addToCart, showAddedToCartMessage, updateCartQuantityDOM } from "../data/cart.js";
+import { cart, addToCart, getCartQuantity } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 let productHTML = "";
+// Stores active timeout IDs for "Added to Cart" messages
+// Key: productId, Value: timeoutId
+const addedMessageTimeouts = {};
 
-updateCartQuantityDOM();
 products.forEach((product) => {
   productHTML += `
     <div class="product-container">
       <div class="product-image-container">
-        <img
-          class="product-image"
-          src="${product.image}"
-        >
+      <img
+      class="product-image"
+      src="${product.image}"
+      >
       </div>
 
       <div class="product-name limit-text-to-2-lines">
-        ${product.name}
+      ${product.name}
       </div>
 
       <div class="product-rating-container">
         <img
           class="product-rating-stars"
           src="images/ratings/rating-${product.rating.stars * 10}.png"
-        >
+          >
 
         <div class="product-rating-count link-primary">
           ${product.rating.count}
         </div>
-      </div>
-
+        </div>
+        
       <div class="product-price">
         $${formatCurrency(product.priceCents)}
       </div>
-
+      
       <div class="product-quantity-container">
         <select class="js-quantity-selector-${product.id}">
           <option selected value="1">1</option>
@@ -46,33 +48,61 @@ products.forEach((product) => {
           <option value="9">9</option>
           <option value="10">10</option>
         </select>
-      </div>
-
+        </div>
+        
       <div class="product-spacer"></div>
 
       <div class="added-to-cart js-added-to-cart-${product.id}">
-        <img src="images/icons/checkmark.png">
+      <img src="images/icons/checkmark.png">
         Added
       </div>
-
+      
       <button
         class="add-to-cart-button button-primary js-add-to-cart"
         data-product-id="${product.id}"
       >
-        Add to Cart
+      Add to Cart
       </button>
-    </div>
-  `;
+      </div>
+      `;
 });
 
 document.querySelector(".js-products-grid").innerHTML = productHTML;
+function updateCartQuantityDOM() {
+  document.querySelector(".js-cart-quantity").innerHTML = getCartQuantity();
+}
+updateCartQuantityDOM();
 
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   button.addEventListener("click", () => {
     const { productId } = button.dataset;
     showAddedToCartMessage(productId);
-    addToCart(productId);
-
+    addToCart(productId, getSelectedQuantity(productId));
+    updateCartQuantityDOM();
     console.log(cart);
   });
 });
+
+function getSelectedQuantity(productId) {
+  const quantitySelector = document.querySelector(
+    `.js-quantity-selector-${productId}`,
+  );
+  return Number(quantitySelector.value);
+}
+
+function showAddedToCartMessage(productId) {
+  const addedToCart = document.querySelector(`.js-added-to-cart-${productId}`);
+
+  addedToCart.classList.add("added-to-cart-visible");
+
+  const previousTimeoutId = addedMessageTimeouts[productId];
+  if (previousTimeoutId) {
+    clearTimeout(previousTimeoutId);
+  }
+
+  const timeoutId = setTimeout(() => {
+    addedToCart.classList.remove("added-to-cart-visible");
+  }, 2000);
+
+  addedMessageTimeouts[productId] = timeoutId;
+}
