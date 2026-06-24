@@ -1,8 +1,9 @@
-import { cart, addToCart, showAddedToCartMessage } from "../data/cart.js";
+import { cart, addToCart, showAddedToCartMessage, updateCartQuantityDOM } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 let productHTML = "";
 
+updateCartQuantityDOM();
 products.forEach((product) => {
   productHTML += `
     <div class="product-container">

@@ -1,16 +1,11 @@
-export let cart = [
-  {
-    productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
-     quantity: 2
-    },{
-      productId: '15b6fc6f-327a-4ec4-896f-486349e85a3d',
-       quantity: 1
-      }
-];
+export let cart = JSON.parse(localStorage.getItem('cart')) || [];
 // Stores active timeout IDs for "Added to Cart" messages
 // Key: productId, Value: timeoutId
 const addedMessageTimeouts = {};
 
+function saveToStorage() {
+  localStorage.setItem('cart', JSON.stringify(cart))
+}
 function findMatchingItem(productId) {
   let matchingItem;
   cart.forEach((cartItem) => {
@@ -28,7 +23,7 @@ function getSelectedQuantity(productId) {
   return Number(quantitySelector.value);
 }
 
-function updateCartQuantityDOM() {
+export function updateCartQuantityDOM() {
   let cartQuantity = 0;
   cart.forEach((item) => {
     cartQuantity += item.quantity;
@@ -50,6 +45,7 @@ export function addToCart(productId) {
   }
 
   updateCartQuantityDOM();
+  saveToStorage()
 }
 
 export function showAddedToCartMessage(productId) {
@@ -79,4 +75,5 @@ export function removeFromCart(productId) {
       }
   })
   cart = newCart;
+  saveToStorage();
 }
