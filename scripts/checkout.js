@@ -90,6 +90,7 @@ cart.forEach((cartItem) => {
     `;
 });
 document.querySelector(".js-order-summary").innerHTML = cartSummaryHTML;
+updateCheckoutItems();
 
 document.querySelectorAll(".js-delete-link").forEach((link) => {
   link.addEventListener("click", () => {
@@ -99,5 +100,16 @@ document.querySelectorAll(".js-delete-link").forEach((link) => {
       `.js-cart-item-container-${productId}`,
     );
     container.remove();
-  })
- })
+    updateCheckoutItems();
+  });
+
+});
+
+function updateCheckoutItems() {
+  let checkoutItems = 0;
+  cart.forEach((item) => {
+    checkoutItems += item.quantity;
+  });
+  document.querySelector(".js-return-to-home-link").innerHTML =
+    `${checkoutItems} items`;
+}
