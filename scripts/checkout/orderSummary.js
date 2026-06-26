@@ -14,6 +14,8 @@ import {
 } from "../../data/deliveryOptions.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
 
+console.log(dayjs().format('dddd')
+)
 export function renderOrderSummary() {
   let cartSummaryHTML = "";
 
@@ -107,10 +109,7 @@ export function renderOrderSummary() {
     link.addEventListener("click", () => {
       const productId = link.dataset.productId;
       removeFromCart(productId);
-      const container = document.querySelector(
-        `.js-cart-item-container-${productId}`,
-      );
-      container.remove();
+      renderOrderSummary();
       updateCheckoutItems();
       renderPaymentSummary();
     });
