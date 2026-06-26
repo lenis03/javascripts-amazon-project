@@ -8,7 +8,11 @@ import {
 import { products, getProduct } from "../../data/products.js";
 import formatCurrency from "../utils/money.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
-import { deliveryOptions, getDeliveryOption } from "../../data/deliveryOptions.js";
+import {
+  deliveryOptions,
+  getDeliveryOption,
+} from "../../data/deliveryOptions.js";
+import { renderPaymentSummary } from "./paymentSummary.js";
 
 export function renderOrderSummary() {
   let cartSummaryHTML = "";
@@ -17,7 +21,7 @@ export function renderOrderSummary() {
     const productId = cartItem.productId;
     const matchingProduct = getProduct(productId);
     const deliveryOptionId = cartItem.deliveryOptionId;
-    const matchingOption = getDeliveryOption(deliveryOptionId)
+    const matchingOption = getDeliveryOption(deliveryOptionId);
     const dateString = deliveryDateString(matchingOption);
     cartSummaryHTML += `
       <div class="cart-item-container js-cart-item-container-${productId}">
@@ -108,6 +112,7 @@ export function renderOrderSummary() {
       );
       container.remove();
       updateCheckoutItems();
+      renderPaymentSummary();
     });
   });
 
@@ -142,6 +147,7 @@ export function renderOrderSummary() {
       document.querySelector(`.js-quantity-label-${productId}`).innerHTML =
         newQuantity;
       updateCheckoutItems();
+      renderPaymentSummary();
     } else {
       alert("Please enter a quantity between 1 and 100.");
     }
@@ -166,6 +172,7 @@ export function renderOrderSummary() {
       const { productId, deliveryOptionId } = element.dataset;
       updateDeliveryOtion(productId, deliveryOptionId);
       renderOrderSummary();
+      renderPaymentSummary();
     });
   });
 }
