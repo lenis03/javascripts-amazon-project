@@ -131,10 +131,9 @@ export function renderOrderSummary() {
 
     if (newQuantity >= 1 && newQuantity <= 100) {
       updateCartQuantity(productId, newQuantity);
-      document.querySelector(`.js-quantity-label-${productId}`).innerHTML =
-        newQuantity;
       renderCheckoutHeader();
       renderPaymentSummary();
+      renderOrderSummary();
     } else {
       alert("Please enter a quantity between 1 and 100.");
     }
