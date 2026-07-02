@@ -141,4 +141,12 @@ describe("test suite: updateDeliveryOption", () => {
     expect(cart[0].quantity).toEqual(1);
     expect(localStorage.setItem).toHaveBeenCalledTimes(0);
   });
+  it("does nothing if the delivery option does not exist", () => {
+    updateDeliveryOtion(productId1, "5");
+    expect(cart.length).toEqual(1);
+    expect(cart[0].productId).toEqual(productId1);
+    expect(cart[0].quantity).toEqual(1);
+    expect(cart[0].deliveryOptionId).toEqual("1");
+    expect(localStorage.setItem).toHaveBeenCalledTimes(0);
+  });
 });

@@ -1,5 +1,5 @@
 export let cart;
-
+import { validDeliveryOption } from "./deliveryOptions.js";
 loadFromStorage();
 export function loadFromStorage() {
   cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -71,10 +71,12 @@ export function updateDeliveryOtion(productId, deliveryOptionId) {
       matchingItem = cartItem;
     }
   });
-    if (!matchingItem) {
-      return;
-    }
-
+  if (!matchingItem) {
+    return;
+  }
+  if (!validDeliveryOption(deliveryOptionId)) {
+    return;
+  }
   matchingItem.deliveryOptionId = deliveryOptionId;
   saveToStorage();
 }
